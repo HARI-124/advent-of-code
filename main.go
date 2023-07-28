@@ -22,7 +22,7 @@ func main() {
 	calories := []int{}
 
 	for _, paragraph := range paragraphs {
-		// fmt.Println(string(paragraph) + "\n")
+		fmt.Println(string(paragraph) + "\n")
 		paragraph1 := string(paragraph)
 		number := strings.Split(paragraph1, "\n")
 		fmt.Println("num", number)
