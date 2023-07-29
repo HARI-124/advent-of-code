@@ -1,24 +1,38 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 )
 
-func Intersection(a, b []string) (c []string) {
-	m := make(map[string]bool)
+func Intersection(a []string) (c string) {
 
-	for _, item := range a {
-		m[item] = true
+	set1 := make(map[string]bool)
+	set2 := make(map[string]bool)
+	set3 := make(map[string]bool)
+
+	for _, item := range a[0] {
+
+		set1[string(item)] = true
+	}
+	for _, item := range a[1] {
+
+		set2[string(item)] = true
+	}
+	for _, item := range a[2] {
+
+		set3[string(item)] = true
 	}
 
-	for _, item := range b {
-		if _, ok := m[item]; ok {
-			c = append(c, item)
+	for char := range set1 {
+
+		if set2[char] && set3[char] {
+			c = char
 		}
 	}
+
 	return
 }
 
@@ -30,25 +44,37 @@ func main() {
 	}
 	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
+	content, err := ioutil.ReadAll(file)
 
+	lines := strings.Split(string(content), "\n")
+
+	paragraphs := make([]string, 0)
+	for i := 0; i < len(lines); i += 3 {
+		end := i + 3
+		if end > len(lines) {
+			end = len(lines)
+		}
+		paragraph := strings.Join(lines[i:end], "\n")
+		paragraphs = append(paragraphs, paragraph)
+	}
 	score := 0
-	for scanner.Scan() {
-		line := scanner.Text()
-		rack := strings.Split(line, "")
 
-		rack1 := rack[:len(rack)/2]
-		rack2 := rack[len(rack)/2:]
-		// fmt.Println("rack1 :", len(rack1), " rack2 :", len(rack2))
-		common := Intersection(rack1, rack2)
-		ascii := []rune(common[0])
-		if int(ascii[0]) > 96 {
-			fmt.Println(int(ascii[0]) - 96)
-			score = score + int(ascii[0]) - 96
-		} else {
+	for _, paragraph := range paragraphs {
 
-			fmt.Println(int(ascii[0]) - 38)
-			score = score + int(ascii[0]) - 38
+		rack := strings.Split(paragraph, "\n")
+		if len(rack) > 2 {
+
+			common := Intersection(rack)
+			fmt.Println(common)
+			ascii := []rune(common)
+			if int(ascii[0]) > 96 {
+				// fmt.Println(int(ascii[0]) - 96)
+				score = score + int(ascii[0]) - 96
+			} else {
+
+				// fmt.Println(int(ascii[0]) - 38)
+				score = score + int(ascii[0]) - 38
+			}
 		}
 
 	}
