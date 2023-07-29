@@ -7,6 +7,21 @@ import (
 	"strings"
 )
 
+func Intersection(a, b []string) (c []string) {
+	m := make(map[string]bool)
+
+	for _, item := range a {
+		m[item] = true
+	}
+
+	for _, item := range b {
+		if _, ok := m[item]; ok {
+			c = append(c, item)
+		}
+	}
+	return
+}
+
 func main() {
 	file, err := os.Open("input.txt")
 	if err != nil {
@@ -20,51 +35,20 @@ func main() {
 	score := 0
 	for scanner.Scan() {
 		line := scanner.Text()
-		values := strings.Split(line, " ")
-		fmt.Println("values: ", values)
-		i := values[0]
-		j := values[1]
-		// chance of getting draw
-		if i == "A" && j == "X" {
-			score = score + 3
+		rack := strings.Split(line, "")
 
-		}
-		if i == "B" && j == "Y" {
+		rack1 := rack[:len(rack)/2]
+		rack2 := rack[len(rack)/2:]
+		// fmt.Println("rack1 :", len(rack1), " rack2 :", len(rack2))
+		common := Intersection(rack1, rack2)
+		ascii := []rune(common[0])
+		if int(ascii[0]) > 96 {
+			fmt.Println(int(ascii[0]) - 96)
+			score = score + int(ascii[0]) - 96
+		} else {
 
-			score = score + 5
-		}
-		if i == "C" && j == "Z" {
-
-			score = score + 7
-
-		}
-
-		if i == "A" && j == "Y" {
-			score = score + 4
-
-		}
-		if i == "B" && j == "Z" {
-
-			score = score + 9
-		}
-		if i == "C" && j == "X" {
-
-			score = score + 2
-
-		}
-
-		if i == "A" && j == "Z" {
-			score = score + 8
-
-		}
-		if i == "B" && j == "X" {
-
-			score = score + 1
-		}
-		if i == "C" && j == "Y" {
-
-			score = score + 6
-
+			fmt.Println(int(ascii[0]) - 38)
+			score = score + int(ascii[0]) - 38
 		}
 
 	}
