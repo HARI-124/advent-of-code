@@ -1,12 +1,9 @@
 package main
 
 import (
-	"bytes"
+	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"sort"
-	"strconv"
 	"strings"
 )
 
@@ -16,26 +13,62 @@ func main() {
 		fmt.Println("err: ", err)
 
 	}
-	content, err := ioutil.ReadAll(file)
-	paragraphs := bytes.Split(content, []byte("\n\n"))
-	sum := 0
-	calories := []int{}
+	defer file.Close()
 
-	for _, paragraph := range paragraphs {
-		fmt.Println(string(paragraph) + "\n")
-		paragraph1 := string(paragraph)
-		number := strings.Split(paragraph1, "\n")
-		fmt.Println("num", number)
-		isum := 0
+	scanner := bufio.NewScanner(file)
 
-		for _, num := range number {
-			num2, _ := strconv.Atoi(num)
-			isum = isum + num2
-			calories = append(calories, isum)
+	score := 0
+	for scanner.Scan() {
+		line := scanner.Text()
+		values := strings.Split(line, " ")
+		fmt.Println("values: ", values)
+		i := values[0]
+		j := values[1]
+		// chance of getting draw
+		if i == "A" && j == "X" {
+			score = score + 3
+
+		}
+		if i == "B" && j == "Y" {
+
+			score = score + 5
+		}
+		if i == "C" && j == "Z" {
+
+			score = score + 7
+
+		}
+
+		if i == "A" && j == "Y" {
+			score = score + 4
+
+		}
+		if i == "B" && j == "Z" {
+
+			score = score + 9
+		}
+		if i == "C" && j == "X" {
+
+			score = score + 2
+
+		}
+
+		if i == "A" && j == "Z" {
+			score = score + 8
+
+		}
+		if i == "B" && j == "X" {
+
+			score = score + 1
+		}
+		if i == "C" && j == "Y" {
+
+			score = score + 6
+
 		}
 
 	}
-	sort.Sort(sort.Reverse(sort.IntSlice(calories)))
-	sum = calories[0] + calories[1] + calories[2]
-	fmt.Println("largest calorie :", sum)
+
+	fmt.Println(score)
+
 }
