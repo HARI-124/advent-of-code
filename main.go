@@ -7,14 +7,17 @@ import (
 	"strings"
 )
 
-func FindUnique(a, b, c, d byte) bool {
+func FindUnique(a string) bool {
 	occurences := make(map[byte]bool)
-	occurences[a] = true
-	occurences[b] = true
-	occurences[c] = true
-	occurences[d] = true
 
-	if len(occurences) == 4 {
+	// for _, char := range a {
+	// 	occurences[char] = true
+	// }
+	for i := 0; i < len(a); i++ {
+		occurences[a[i]] = true
+	}
+
+	if len(occurences) == 14 {
 		return true
 	}
 
@@ -26,10 +29,12 @@ func Iterate(a string) {
 
 	for i := 0; i < len(a); i++ {
 
-		// end := i+14
-		result := FindUnique(a[i], a[i+1], a[i+2], a[i+3])
+		end := i + 14
+		result := FindUnique(a[i:end])
+		fmt.Println(a[i:end])
+
 		if result {
-			fmt.Println(i + 3)
+			fmt.Println(i + 14)
 			return
 		}
 	}
